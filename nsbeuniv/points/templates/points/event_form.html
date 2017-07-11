@@ -1,0 +1,27 @@
+{% extends 'points/points_base.html' %}
+{% load bootstrap3 %}
+
+{% block event_content %}
+
+<style>
+
+form {
+  text-align: left;
+  display: inline-grid;
+  width: 50%;
+  font-size: 18px;
+    }
+
+</style>
+
+<h1 align='center'>Create New Event</h1>
+<div class="container">
+  <div class="jumbotron" align='center'>
+    <form action="" class=form-horizontal enctype="multipart/form-data" method="post" id='eventForm'>
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <input type= "submit" name= "btn btn-primary btn-large" value= "Submit">
+    </form>
+  </div>
+</div>
+{% endblock %}

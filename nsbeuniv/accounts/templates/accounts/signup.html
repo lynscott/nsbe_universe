@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+
+
+{% block content %}
+<style>
+
+form {
+  text-align: left;
+  display: inline-grid;
+  width: 50%;
+  font-size: 18px;
+
+}
+
+</style>
+
+<div class="container">
+
+<div class="jumbotron" align='center'>
+  <h1>Sign Up</h1>
+  <form method="post" class='form-horizontal'>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign Up">
+
+  </form>
+  </div>
+</div>
+
+{% endblock %}

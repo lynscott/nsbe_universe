@@ -1,0 +1,29 @@
+{% extends 'points/points_base.html' %}
+{% block event_content %}
+
+<div class="jumbotron">
+<h1>{{event_detail.name}}</h1>
+<h3>Location: {{event_detail.location}}</h2>
+<h3>Points: {{event_detail.points}}</h2>
+<p>Info: {{event_detail.info}}</p>
+{% if event_detail.pic %}
+<p>
+<img src="{{MEDIA_URL}}{{event_detail.pic.url}}" alt="Event Image" class='img-responsive' width="300" height="300">
+</p>
+{% else %}
+<p>No Image Uploaded</p>
+{% endif %}
+<a href="{{event_detail.url}}">{{event_detail.url}}</a>
+</div>
+
+{% endblock %}
+{% block postevent %}
+
+{% if user.is_staff %}
+<div class="container">
+  <p><a class="btn btn-warning" href="{% url 'points:update' pk=event_detail.pk %}">Update</a></p>
+</div>
+{% else %}
+{% endif %}
+
+{% endblock %}
