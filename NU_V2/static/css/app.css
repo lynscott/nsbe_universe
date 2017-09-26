@@ -1,0 +1,56 @@
+.navbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  letter-spacing: 2px;
+  }
+
+
+.navbar-nav  li a:hover {
+      color: #ce2323 !important;
+  }
+
+.navbar {
+  background-color: #000000;
+  font-size: 20px;
+  }
+
+  #title {
+      font-size: 24px;
+      }
+
+
+    .margin {margin-bottom: 45px;}
+
+  body {
+      font-family: 'Bangers', cursive;
+      font-size: 15px;
+    }
+
+    .bg-1 {
+          background: url(http://i.imgur.com/asLW3N6.jpg) no-repeat center fixed; /* Grey */
+          color: #ffffff;
+          background-size: cover;
+          }
+
+    .bg-2 {
+          background-color: #8c1212; /* Dark Red */
+          color: #ffffff;
+          }
+
+    .bg-3 {
+          background-color: #ffffff; /* White */
+          color: #555555;
+          }
+
+    #page {
+              padding-top: 70px;
+              padding-bottom: 70px;
+          }
+
+    img {
+            max-width: 100%;
+            height: auto;
+        }
