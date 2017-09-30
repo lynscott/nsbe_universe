@@ -2,7 +2,7 @@ from flask import (Flask, render_template, request, redirect,
                     url_for, jsonify, flash)
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Catalog, CatalogItem, User
+from database_setup import Base, Event, User
 from flask import session as login_session
 import random
 import string
@@ -16,8 +16,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+
 APPLICATION_NAME = "nsbe universe"
 
 
@@ -63,8 +62,8 @@ def getUserID(email):
 
 @app.route('/')
 @app.route('/home/')
-def home():
-    current_user = getUserInfo(User.user_id)
+def goHome():
+    current_user = getUserInfo(User.id)
     return render_template('index.html', current_user=current_user)
 
 # Show all sauce catalogs
@@ -74,3 +73,9 @@ def showEvents():
     creator = getUserInfo(Event.user_id)
     # return "This page will show all my catalogs of various sauces"
     return render_template('eventList.html', events=events, creator=creator)
+
+
+if __name__ == '__main__':
+    app.secret_key = 'nsbe_u_secret_key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)

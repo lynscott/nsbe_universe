@@ -6,50 +6,30 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
  integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
  <link rel="stylesheet"  href="{{ url_for('static', filename='css/app.css') }}">
- <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
- <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
 {% block head %}
 
 {% endblock %}
 
 </head>
 <body>
- <nav class="navbar navbar-inverse">
-   <div class="container">
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <a class="navbar-brand" id="title" href="{{ url_for('goHome') }}">NSBE Universe</a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+       <span class="navbar-toggler-icon"></span>
+     </button>
 
-     <div class="navbar-header">
-       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-1" aria-expanded="false">
-         <span class="sr-only">Toggle navigation</span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-       </button>
-       <a class="navbar-brand" id = "brand" href="{{url_for('home')}}">NSBE Universe</a>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="navbar-nav">
+         <a class="nav-item nav-link" href="#">About <span class="sr-only">(current)</span></a>
+         <a class="nav-item nav-link" href="#">Features</a>
+         <a class="nav-item nav-link text-right" href="#">Events</a>
+         <a class="nav-item nav-link active mr" href="#">Login</a>
+      </div>
      </div>
-
-
-     <div class="collapse navbar-collapse" id="navbar-collapse-1">
-       <ul class="nav navbar-nav">
-         <li><a href="#">About</a></li>
-         <li><a href="#">Contact</a></li>
-         <li><a href="#">Retention</a></li>
-       </ul>
-       <ul class="nav navbar-nav navbar-right">
-         {% if 'username' in session and session.provider == 'google' %}
-          <li><a href="{{url_for("gdisconnect")}}">Logout</a></li>
-         {% elif 'username' in session and session.provider == 'facebook' %}
-          <li><a href="{{url_for("fbdisconnect")}}">Logout</a></li
-         {% else %}
-          <li><a href="{{url_for("showLogin")}}">Login</a></li>
-         {% endif %}
-         <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-         <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-       </ul>
-     </div>
-   </div>
- </nav>
+   </nav>
 
 
  {% block content %}
