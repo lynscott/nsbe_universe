@@ -59,6 +59,14 @@ def getUserID(email):
     except:
         return None
 
+def addUserPoints(user_id,event):
+    user = session.query(User).filter_by(id=user_id).first()
+    points =  session.query(Event).filter_by(Event.id).points
+    new_points = user.points + points
+    session.add(new_points)
+    session.commit
+    return new_points
+
 
 @app.route('/')
 @app.route('/home/')
@@ -71,8 +79,19 @@ def goHome():
 def showEvents():
     events = session.query(Event).all()
     creator = getUserInfo(Event.user_id)
+    current_user = getUserInfo(User.id)
     # return "This page will show all my catalogs of various sauces"
-    return render_template('eventList.html', events=events, creator=creator)
+    return render_template('eventList.html', events=events, current_user=current_user, creator=creator)
+
+@app.route('/login/')
+def userLogin():
+    current_user = getUserInfo(User.id)
+    return render_template('login.html', current_user=current_user)
+
+@app.route('/about/')
+def About():
+    return render_template('about.html')
+
 
 
 if __name__ == '__main__':

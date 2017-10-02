@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+
+  <div class="container">
+    <h1 class="display-3">Event List</h1>
+    <p class="lead">Welcome back user.name you currently have user.points points.</p>
+
+    <table class="table table-inverse">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Points</th>
+          <th>Creator</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a class= "btn btn-light" href="#">Create Event</a>
+
+  </div>
+
+</div>
+
+{% endblock %}
