@@ -9,7 +9,7 @@
   <h3>Date: {{event.date}}</h3>
   {% if event.picture %}
   <p>
-  <img src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Event Image" class='img-responsive' width="300" height="300">
+  <img src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Event Image" id="event-pic" class="img-fluid">
   </p>
   {% else %}
   <p>No Image Uploaded</p>

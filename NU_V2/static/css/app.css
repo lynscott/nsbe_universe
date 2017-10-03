@@ -7,9 +7,8 @@ body {
 }
 
 body {
-  background: url(http://i.imgur.com/asLW3N6.jpg);
+  background: url(http://i.imgur.com/asLW3N6.jpg) no-repeat center center fixed;
   background-size: cover;
-  background-position: center;
 }
 
 .navbar {
@@ -56,7 +55,7 @@ h1 {
 }
 
 hr {
-    width: 400px;
+    width: 80%;
     border-top: 1px solid #f8f8f8;
     border-bottom: 1px solid rgba(0,0,0,0.2);
 }
@@ -78,4 +77,8 @@ form {
 #about-list {
   margin-left: 25%;
   width: 50%;
+}
+
+#event-pic {
+  width: 40%
 }
