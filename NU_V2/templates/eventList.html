@@ -10,23 +10,25 @@
     <table class="table table-inverse">
       <thead>
         <tr>
+          <th>#</th>
           <th>Name</th>
           <th>Date</th>
           <th>Points</th>
-          <th>Creator</th>
         </tr>
       </thead>
       <tbody>
+        {% for event in events %}
         <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
+          <th scope="row">{{event.id}}</th>
+          <td>{{event.name}}</td>
+          <td>{{event.date}}</td>
+          <td>{{event.points}}</td>
         </tr>
+        {% endfor %}
       </tbody>
     </table>
 
-    <a class= "btn btn-light" href="#">Create Event</a>
+    <a class= "btn btn-light" href="{{url_for('createEvent')}}">Create Event</a>
 
   </div>
 

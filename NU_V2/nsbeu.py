@@ -92,6 +92,20 @@ def userLogin():
 def About():
     return render_template('about.html')
 
+@app.route('/event/new', methods=['GET', 'POST'])
+def createEvent():
+    if request.method == 'POST':
+        newEvent = Event(name=request.form['name'], points= request.form['points'], address=request.form[
+                           'address'], date=request.form['date'], details=request.form['details'],
+                         url=request.form['url'])
+        session.add(newEvent)
+        session.commit()
+        flash("New Event Created!")
+        return redirect(url_for('showEvents'))
+    else:
+        return render_template('eventForm.html')
+
+
 
 
 if __name__ == '__main__':
