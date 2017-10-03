@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{%  block content %}
+
+
+<div class="container" id="delete">
+    <h1> Are you sure you want to delete {{event.name}}? </h1>
+      <form action="#" method = 'post'>
+          {{csrf_token}}
+      <input class = "btn btn-danger" type='submit' value = 'Delete'>
+      <a class = "btn btn-light" href = "{{url_for('showEvents')}}"> Cancel </a>
+    </form>
+</div>
+
+{% endblock %}

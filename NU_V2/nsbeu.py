@@ -127,6 +127,22 @@ def createEvent():
         return render_template('eventForm.html')
 
 
+@app.route('/event/<int:event_id>/delete/', methods=['GET', 'POST'])
+
+def deleteEvent(event_id):
+    eventToDelete = session.query(Event).filter_by(id=event_id).one()
+    # if catalogToDelete.user_id != login_session['user_id']:
+    #     return '''<script>function authFunction() {alert('You are not authorized
+    #      to delete this catalog.');}</script><body onload='authFunction()''>'''
+    if request.method == 'POST':
+        session.delete(eventToDelete)
+        session.commit()
+        return redirect(url_for('showEvents', id=event_id))
+    else:
+        return render_template('deleteEvent.html', event=eventToDelete)
+
+
+
 @app.route('/picture/<filename>')
 def uploaded_picture(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
