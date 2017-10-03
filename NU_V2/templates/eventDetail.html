@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+  <div class="jumbotron" id="about">
+
+  <h1>{{event.name}}</h1>
+  <h3>Date: {{event.date}}</h3>
+  {% if event.picture %}
+  <p>
+  <img src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Event Image" class='img-responsive' width="300" height="300">
+  </p>
+  {% else %}
+  <p>No Image Uploaded</p>
+  {% endif %}
+  <h3>Location: {{event.address}}</h2>
+  <h3>Points: {{event.points}}</h2>
+  <p>Info: {{event.details}}</p>
+  <p>URL: {{event.url}}</p>
+
+  </div>
+  <a class = "btn btn-light" href="{{url_for('showEvents')}}">Back To Events</a>
+</div>
+
+
+{% endblock %}

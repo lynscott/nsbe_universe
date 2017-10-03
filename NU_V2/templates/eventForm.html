@@ -6,7 +6,7 @@
 <div class="container">
   <div class="jumbotron">
     <h1 class="display-3" id="about">Create New Event</h1>
-    <form class=form-horizontal method='POST' id='eventForm'>
+    <form class=form-horizontal method='POST' enctype='multipart/form-data' id='eventForm'>
       {{ csrf_token }}
       <div class="form-row">
         <div class="form-group col-md-6">

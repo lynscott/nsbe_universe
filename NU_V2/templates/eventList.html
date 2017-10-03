@@ -20,7 +20,7 @@
         {% for event in events %}
         <tr>
           <th scope="row">{{event.id}}</th>
-          <td>{{event.name}}</td>
+          <td><a href="{{url_for('eventDetail', event_id=event.id)}}">{{event.name}}</a></td>
           <td>{{event.date}}</td>
           <td>{{event.points}}</td>
         </tr>
