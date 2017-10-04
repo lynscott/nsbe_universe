@@ -137,9 +137,43 @@ def deleteEvent(event_id):
     if request.method == 'POST':
         session.delete(eventToDelete)
         session.commit()
-        return redirect(url_for('showEvents', id=event_id))
+        return redirect(url_for('showEvents', event_id=event_id))
     else:
         return render_template('deleteEvent.html', event=eventToDelete)
+
+
+@app.route('/event/<int:event_id>/edit', methods=['GET', 'POST'])
+
+def editEvent(event_id):
+    editedEvent = session.query(Event).filter_by(id=event_id).one()
+    # if login_session['user_id'] != catalog.user_id:
+    #     return '''<script>function authFunction() {alert('You are not authorized
+    #      to edit this item.');}</script><body onload='authFunction()''>'''
+    if request.method == 'POST':
+        if request.form['name']:
+            editedEvent.name = request.form['name']
+        if request.form['points']:
+            editedEvent.points = request.form['points']
+        if request.form['date']:
+            editedEvent.date = request.form['date']
+        if request.form['address']:
+            editedEvent.address = request.form['address']
+        if request.form['details']:
+            editedEvent.details = request.form['details']
+        if request.form['url']:
+            editedEvent.url = request.form['url']
+        if request.files['picture']:
+            picture = request.files['picture']
+            filename = secure_filename(picture.filename)
+            picture_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            picture.save(picture_path)
+            editedEvent.picture = filename
+        session.add(editedEvent)
+        session.commit()
+        flash("Event Updated!")
+        return redirect(url_for('showEvents', event_id=event_id))
+    else:
+        return render_template('editEvent.html', event_id=event_id, event=editedEvent)
 
 
 
