@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="jumbotron" id="about">
+    <h1 class="display-3">Join NSBE Universe!</h1>
+    <form method='POST'>
+      {{ csrf_token }}
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <input type="text" name="name" class="form-control" placeholder="Name">
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <input type="email" name="email" class="form-control" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <input type="password" name="password" class="form-control" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <input type="password" name="confirm" class="form-control" placeholder="Confirm Password">
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <label>Choose Alias</label>
+          <select name="alias" class="form-control">
+            <option>Hulk</option>
+            <option>Wolverine</option>
+            <option>Carnage</option>
+          </select>
+        </div>
+      </div>
+      <input type="submit" class="btn btn-light" value="submit">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

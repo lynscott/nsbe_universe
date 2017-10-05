@@ -13,8 +13,10 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
+    password = Column(String(250))
     picture = Column(String(250))
     points = Column(Integer)
+    alias = Column(String(50))
 
 
 class Event(Base):
@@ -40,7 +42,7 @@ class Event(Base):
         }
 
 
-engine = create_engine('sqlite:///nsbeuniv.db')
+engine = create_engine('sqlite:///nsbeuniv_users.db')
 
 
 Base.metadata.create_all(engine)

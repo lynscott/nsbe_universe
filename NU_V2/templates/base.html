@@ -27,8 +27,15 @@
       <div class="navbar-nav">
          <a class="nav-item nav-link" href="{{url_for('About')}}">About <span class="sr-only">(current)</span></a>
          <a class="nav-item nav-link" href="#">Leader Board</a>
+         {% if 'username' in session %}
          <a class="nav-item nav-link" href="{{url_for('showEvents')}}">Events</a>
+         <a class="nav-item nav-link invisible" href="{{url_for('signUp')}}">Sign Up</a>
+         <a class="nav-item nav-link invisible" href="{{url_for('userLogin')}}">Login</a>
+         <a class="nav-item nav-link" href="#">Logout</a>
+         {% else %}
+         <a class="nav-item nav-link" href="{{url_for('signUp')}}">Sign Up</a>
          <a class="nav-item nav-link" href="{{url_for('userLogin')}}">Login</a>
+         {% endif %}
       </div>
      </div>
      </div>

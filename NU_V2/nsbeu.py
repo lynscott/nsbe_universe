@@ -16,6 +16,10 @@ from flask import make_response
 import requests
 from functools import wraps
 from werkzeug.utils import secure_filename
+from passlib.hash import bcrypt
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, IntegerField, SelectField
+from wtforms.validators import InputRequired, Email, EqualTo
 
 UPLOAD_FOLDER = 'media/eventPics'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -27,7 +31,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 APPLICATION_NAME = "nsbe universe"
 
 
-engine = create_engine('sqlite:///nsbeuniv.db')
+engine = create_engine('sqlite:///nsbeuniv_users.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -78,6 +82,18 @@ def addUserPoints(user_id,event):
     session.commit
     return new_points
 
+@app.route('/signup/', methods=['GET', 'POST'])
+def signUp():
+    if request.method == 'POST':
+        newUser = User(name=request.form['name'], email=request.form[
+                       'email'], password=bcrypt.hash(request.form['password']) , alias=request.form['alias'])
+        session.add(newUser)
+        session.commit()
+        user = session.query(User).filter_by(email=request.form['email']).first()
+        return redirect(url_for('userLogin'))
+    else:
+        return render_template('signUp.html')
+
 
 @app.route('/')
 @app.route('/home/')
@@ -96,9 +112,21 @@ def showEvents():
     return render_template('eventList.html', events=events, current_user=current_user, creator=creator)
 
 
-@app.route('/login/')
+@app.route('/login/', methods=['GET', 'POST'])
 def userLogin():
     current_user = getUserInfo(User.id)
+    if request.method == 'POST':
+        user = session.query(User).filter_by(email=request.form['email']).first()
+        if user is not None and bcrypt.verify(request.form['password'], user.password) is True:
+            login_session['provider'] = 'manual'
+            login_session['username'] = user.name
+            login_session['user_id'] = user.id
+            login_session['points'] = user.points
+            login_session['alias'] = user.alias
+            flash("Now logged in as %s" % login_session['username'])
+            return redirect(url_for('goHome'))
+        else:
+            flash("You dont have an account with that email address!")
     return render_template('login.html', current_user=current_user)
 
 
