@@ -2,10 +2,9 @@
 {% block content %}
 
 <div class="container">
-
   <div class="jumbotron" id="about">
 
-  <h1>{{event.name}}</h1>
+  <h1 class="display-3">{{event.name}}</h1>
   <h3>Date: {{event.date}}</h3>
   {% if event.picture %}
   <p>
@@ -14,9 +13,14 @@
   {% else %}
   <p>No Image Uploaded</p>
   {% endif %}
-  <h3>Location: {{event.address}}</h2>
-  <h3>Points: {{event.points}}</h2>
-  <p>Info: {{event.details}}</p>
+  <h4>Location: {{event.address}}</h2>
+  <h4>Points: {{event.points}}</h2>
+  <div class="row justify-content-center" >
+    <div class="col-md-6">
+      <p>Info: {{event.details}}</p>
+    </div>
+  </div>
+
   <p>URL: <a href="{{event.url}}">{{event.url}}</a></p>
 
   </div>
