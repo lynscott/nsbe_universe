@@ -29,7 +29,7 @@
          <a class="nav-item nav-link" href="#">Leader Board</a>
          {% if 'username' in session %}
          <a class="nav-item nav-link" href="{{url_for('showEvents')}}">Events</a>
-         <a class="nav-item nav-link" href="#">Logout</a>
+         <a class="nav-item nav-link" href="{{url_for('manualLogOut')}}">Logout</a>
          <a class="nav-item nav-link active" href="#">Welcome {{session.alias}}</a>
          {% else %}
          <a class="nav-item nav-link" href="{{url_for('signUp')}}">Sign Up</a>

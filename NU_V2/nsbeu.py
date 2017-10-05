@@ -123,7 +123,7 @@ def userLogin():
             login_session['user_id'] = user.id
             login_session['points'] = user.points
             login_session['alias'] = user.alias
-            flash("Now logged in as %s" % login_session['username'])
+            flash('Now logged in as %s' % login_session['username'])
             return redirect(url_for('goHome'))
         else:
             flash("You dont have an account with that email address!")
@@ -216,6 +216,17 @@ def eventDetail(event_id):
     creator = getUserInfo(Event.user_id)
     return render_template('eventDetail.html', id=event_id, event=event,
                             creator=creator)
+
+@app.route('/logout/')
+def manualLogOut():
+    del login_session['provider']
+    del login_session['username']
+    del login_session['user_id']
+    del login_session['points']
+    del login_session['alias']
+    flash('You are now logged out!')
+    return redirect(url_for('goHome'))
+
 
 
 
