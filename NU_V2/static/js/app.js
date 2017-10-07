@@ -7,10 +7,8 @@ class MarvelCharacter {
         this.description = data.description|| "n/a";
         this.thumbnail = data.thumbnail;
     }
-    showSelf() {
-        console.log('displaying character');
-        $('button').on('click', search());
-
+    setImage() {
+        return this.thumbnail.path +"."+ this.thumbnail.extension;
 
     }
 }
@@ -18,9 +16,9 @@ class MarvelCharacter {
 
 var viewModel = {
     userInput : ko.observable(''),
-    characterName : ko.observable(),
-    characterDesc : ko.observable(),
-    characterImage : ko.observable(),
+    characterName : ko.observable(''),
+    characterDesc : ko.observable(''),
+    characterImage : ko.observable(''),
     getInfo : function() {
 
         var base_url = 'https://gateway.marvel.com:443/v1/public/characters?';
@@ -34,13 +32,16 @@ var viewModel = {
                 var data = result.data.results[0];
 
                 userCharacter = new MarvelCharacter(data);
+                viewModel.characterName(userCharacter.name);
+                viewModel.characterDesc(userCharacter.description);
+                viewModel.characterImage(userCharacter.thumbnail.path+"."
+                                    +userCharacter.thumbnail.extension);
                 return userCharacter;
 
 
             }).fail(function() {
                 alert("Error Loading Characters");
             });
-
     }
 };
 ko.applyBindings(viewModel);

@@ -63,6 +63,11 @@ hr {
   opacity: .9;
 }
 
+#character {
+  width: 50%;
+  align-self: center;
+}
+
 #about {
   text-align: center;
 }

@@ -28,12 +28,26 @@
       </div>
       <div class="form-row justify-content-center">
         <div class="col-md-6">
-          <input type="text" name="alias" data-bind="textInput: userInput" id="user" class="form-control" placeholder="Enter a Marvel Character">
+          <input type="text" name="alias" data-bind="textInput: userInput" class="form-control" placeholder="Enter a Marvel Character">
           <button type="button" data-bind="click: getInfo" class="btn btn-primary btn-small justify-content-left" name="search">Search</button>
         </div>
       </div>
+      <br>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <img class="card-img-top img-fluid" id="character" data-bind="attr: { src: characterImage }" alt="Character Image">
+            <div class="card-body">
+              <h4 class="card-title" data-bind="html: characterName">Name</h4>
+              <p class="card-text" data-bind="html: characterDesc">Description</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
       <input type="submit" class="btn btn-light" value="submit">
     </form>
+
   </div>
 </div>
 
