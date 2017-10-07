@@ -1,35 +1,46 @@
 //Marvel api
-var Character = function(result) {
-    this.id = result.id;
-    this.name = result.name;
-    this.description = result.description|| "n/a";
-    this.thumbnail = result.thumbnail;
+
+class MarvelCharacter {
+    constructor(data) {
+        this.id = data.id;
+        this.name = data.name;
+        this.description = data.description|| "n/a";
+        this.thumbnail = data.thumbnail;
+    }
+    showSelf() {
+        console.log('displaying character');
+        $('button').on('click', search());
+
+
+    }
+}
+
+
+var viewModel = {
+    userInput : ko.observable(''),
+    characterName : ko.observable(),
+    characterDesc : ko.observable(),
+    characterImage : ko.observable(),
+    getInfo : function() {
+
+        var base_url = 'https://gateway.marvel.com:443/v1/public/characters?';
+        var api = '&apikey=194e9e5d5fcffb43dadcb84dc251c2b4';
+        var character = 'name='+this.userInput();
+
+        var url = base_url+character+api;
+        //Request Marvel Character Info
+        $.getJSON(url)
+            .done(function(result) {
+                var data = result.data.results[0];
+
+                userCharacter = new MarvelCharacter(data);
+                return userCharacter;
+
+
+            }).fail(function() {
+                alert("Error Loading Characters");
+            });
+
+    }
 };
-
-
-marvelArray = []
-
-var base_url = 'https://gateway.marvel.com:443/v1/public/characters?orderBy=name&apikey=194e9e5d5fcffb43dadcb84dc251c2b4';
-var endpoint = '';
-
-
-
-var url = base_url;
-
-//Request Foursquare marker info
-$.getJSON(url)
-    .done(function(result) {
-        var characterList = result.data.results;
-
-        self.charactersArray = [];
-
-        //Push each venue into ko array and convert foursqaure venue data into the object data that you want
-        characterList.forEach(function(result) {
-            marvelArray.push(new Character(result));
-        });
-
-        //Create google markers for each venue, push markers into global Markers array
-
-    }).fail(function() {
-        alert("Error Loading Characters");
-    });
+ko.applyBindings(viewModel);
