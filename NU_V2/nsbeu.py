@@ -82,6 +82,14 @@ def addUserPoints(user_id,event):
     session.commit
     return new_points
 
+
+
+@app.route('/users/JSON')
+def JSON():
+    users = session.query(User).all()
+    return jsonify(users=[r.serialize for r in users])
+
+
 @app.route('/signup/', methods=['GET', 'POST'])
 def signUp():
     users = session.query(User).all()
@@ -126,6 +134,7 @@ def userLogin():
             login_session['user_id'] = user.id
             login_session['points'] = user.points
             login_session['alias'] = user.alias
+            login_session['pic'] = user.alias_pic
             flash('Now logged in as %s' % login_session['username'])
             return redirect(url_for('goHome'))
         else:

@@ -22,7 +22,17 @@ class User(Base):
     alias_bio = Column(String(250), nullable=False)
     alias_pic = Column(String(250), nullable=False)
 
-
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'name': self.name,
+            'id': self.id,
+            'year': self.year,
+            'major': self.major,
+            'alias': self.alias,
+            'points': self.points,
+                }
 
 class Event(Base):
     __tablename__ = 'event'

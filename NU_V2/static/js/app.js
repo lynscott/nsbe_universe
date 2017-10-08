@@ -14,20 +14,28 @@ class MarvelCharacter {
 }
 
 
+$.getJSON("http://localhost:5000/users/JSON")
+        .done(function(data){
+            console.log(data);
+            return users=data.users;
+        }).fail(function() {
+            alert("Error getting user data")
+        });
+
+
 var viewModel = {
     userInput : ko.observable(''),
     characterName : ko.observable(''),
     characterDesc : ko.observable(''),
     characterImage : ko.observable(''),
-    takenCharacters : ko.observableArray(''),
     checkCharacter : function() {
-        for (var i = 0; i < this.takenCharacters().length; i++) {
-            if( userCharacter.name == this.takenCharacters()[i] ) {
+        for (var i = 0; i < users.length; i++) {
+            if( viewModel.characterName() == users[i].alias ) {
                alert('This character is already assigned');
-            } else {
-               this.takenCharacters.push(userCharacter);
-               return true;
-            }
+               return false;
+           }else {
+               toggleSubmit = true
+           }
         }
     },
     getInfo : function() {
