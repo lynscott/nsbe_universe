@@ -11,12 +11,17 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    email = Column(String(250), nullable=False)
+    name = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False)
+    year = Column(String(50), nullable=False)
+    major = Column(String(50), nullable=False)
     password = Column(String(250))
     picture = Column(String(250))
     points = Column(Integer)
-    alias = Column(String(50))
+    alias = Column(String(50), nullable=False)
+    alias_bio = Column(String(250), nullable=False)
+    alias_pic = Column(String(250), nullable=False)
+
 
 
 class Event(Base):

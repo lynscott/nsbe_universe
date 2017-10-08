@@ -4,7 +4,7 @@
 <div class="container">
   <div class="jumbotron" id="about">
     <h1 class="display-3">Join NSBE Universe!</h1>
-    <form method='POST'>
+    <form method='POST' data-bind="submit: checkCharacter">
       {{ csrf_token }}
       <div class="form-row justify-content-center">
         <div class="col-md-6">
@@ -14,6 +14,23 @@
       <div class="form-row justify-content-center">
         <div class="col-md-6">
           <input type="email" name="email" class="form-control" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <select class="form-control" name="year" id="exampleFormControlSelect1" placeholder="Year">
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+            <option>4th Year+</option>
+            <option>Graduate/Professional</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6">
+          <input type="text" name="major" class="form-control" placeholder="Major">
         </div>
       </div>
       <div class="form-row justify-content-center">
@@ -28,26 +45,40 @@
       </div>
       <div class="form-row justify-content-center">
         <div class="col-md-6">
-          <input type="text" name="alias" data-bind="textInput: userInput" class="form-control" placeholder="Enter a Marvel Character">
-          <button type="button" data-bind="click: getInfo" class="btn btn-primary btn-small justify-content-left" name="search">Search</button>
+          <div class="input-group">
+            <input type="text" name="alias" data-bind="textInput: userInput" class="form-control" placeholder="Enter a Marvel Character">
+            {% for user in users %}
+              {% if user.alias == request.form['alias'] %}
+              <p><em>This Character is already assigned</em></p>
+              {% else %}
+              {% endif %}
+            {% endfor %}
+            <span class="input-group-btn">
+            <button type="button" data-bind="click: getInfo" class="btn btn-primary" name="search">Search</button>
+            </span>
+          </div>
         </div>
       </div>
       <br>
       <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="card">
-            <img class="card-img-top img-fluid" id="character" data-bind="attr: { src: characterImage }" alt="Character Image">
+            <img class="card-img-top img-fluid" id="character" data-bind="attr: { src: characterImage }">
             <div class="card-body">
-              <h4 class="card-title" data-bind="html: characterName">Name</h4>
-              <p class="card-text" data-bind="html: characterDesc">Description</p>
+              <h4 class="card-title"  data-bind="html: characterName">Name</h4>
+              <p class="card-text"  data-bind="html: characterDesc">Description</p>
             </div>
+          </div>
+          <div class="invisible">
+            <input type="text" readonly name="pic" data-bind="value: characterImage" class="form-control-plaintext">
+            <input type="text" readonly name="character" data-bind="value: characterName" class="form-control-plaintext">
+            <input type="text" readonly name="bio" data-bind="value: characterDesc" class="form-control-plaintext">
           </div>
         </div>
       </div>
       <br>
       <input type="submit" class="btn btn-light" value="submit">
     </form>
-
   </div>
 </div>
 

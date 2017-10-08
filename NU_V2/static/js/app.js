@@ -19,6 +19,17 @@ var viewModel = {
     characterName : ko.observable(''),
     characterDesc : ko.observable(''),
     characterImage : ko.observable(''),
+    takenCharacters : ko.observableArray(''),
+    checkCharacter : function() {
+        for (var i = 0; i < this.takenCharacters().length; i++) {
+            if( userCharacter.name == this.takenCharacters()[i] ) {
+               alert('This character is already assigned');
+            } else {
+               this.takenCharacters.push(userCharacter);
+               return true;
+            }
+        }
+    },
     getInfo : function() {
 
         var base_url = 'https://gateway.marvel.com:443/v1/public/characters?';

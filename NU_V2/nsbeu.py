@@ -84,15 +84,18 @@ def addUserPoints(user_id,event):
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signUp():
+    users = session.query(User).all()
     if request.method == 'POST':
         newUser = User(name=request.form['name'], email=request.form[
-                       'email'], password=bcrypt.hash(request.form['password']) , alias=request.form['alias'])
+                       'email'], year=request.form['year'], major=request.form['major'],
+                       password=bcrypt.hash(request.form['password']), alias=request.form['character'],
+                       alias_pic=request.form['pic'], alias_bio=request.form['bio'] )
         session.add(newUser)
         session.commit()
         user = session.query(User).filter_by(email=request.form['email']).first()
         return redirect(url_for('userLogin'))
     else:
-        return render_template('signUp.html')
+        return render_template('signUp.html', users=users)
 
 
 @app.route('/')
