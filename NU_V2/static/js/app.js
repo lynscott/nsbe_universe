@@ -28,14 +28,16 @@ var viewModel = {
     characterName : ko.observable(''),
     characterDesc : ko.observable(''),
     characterImage : ko.observable(''),
-    checkCharacter : function() {
-        for (var i = 0; i < users.length; i++) {
-            if( viewModel.characterName() == users[i].alias ) {
-               alert('This character is already assigned');
-               return false;
-           }else {
-               toggleSubmit = true
-           }
+    toggleSubmit : ko.observable(false),
+    toggleAlert : ko.observable(false),
+    togglePass : ko.observable(false),
+    pass1 : ko.observable(''),
+    pass2 : ko.observable(''),
+    checkPass : function() {
+        if (this.pass1() != this.pass2()) {
+            return this.togglePass(true);
+        }else {
+            return this.togglePass(false);
         }
     },
     getInfo : function() {
@@ -43,6 +45,7 @@ var viewModel = {
         var base_url = 'https://gateway.marvel.com:443/v1/public/characters?';
         var api = '&apikey=194e9e5d5fcffb43dadcb84dc251c2b4';
         var character = 'name='+this.userInput();
+        var found = null;
 
         var url = base_url+character+api;
         //Request Marvel Character Info
@@ -50,12 +53,28 @@ var viewModel = {
             .done(function(result) {
                 var data = result.data.results[0];
 
+                //Display chracter info
                 userCharacter = new MarvelCharacter(data);
                 viewModel.characterName(userCharacter.name);
                 viewModel.characterDesc(userCharacter.description);
                 viewModel.characterImage(userCharacter.thumbnail.path+"."
                                     +userCharacter.thumbnail.extension);
-                return userCharacter;
+
+                //Check if character is taken
+                for (var i = 0; i < users.length; i++) {
+                    if( viewModel.characterName() == users[i].alias ) {
+                       found = true;
+                       break;
+                   }
+                }
+                if( found == true){
+                    viewModel.toggleAlert(true);
+                    return viewModel.toggleSubmit(false);
+                }else {
+                    found = false;
+                    viewModel.toggleAlert(false);
+                    return viewModel.toggleSubmit(true);
+                }
 
 
             }).fail(function() {

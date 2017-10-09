@@ -236,6 +236,7 @@ def manualLogOut():
     del login_session['user_id']
     del login_session['points']
     del login_session['alias']
+    del login_session['alias_pic']
     flash('You are now logged out!')
     return redirect(url_for('goHome'))
 
