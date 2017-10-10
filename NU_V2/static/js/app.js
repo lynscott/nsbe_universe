@@ -1,4 +1,3 @@
-//Marvel api
 
 class MarvelCharacter {
     constructor(data) {
@@ -11,6 +10,15 @@ class MarvelCharacter {
         return this.thumbnail.path +"."+ this.thumbnail.extension;
 
     }
+}
+
+function initMap() {
+geocoder = new google.maps.Geocoder();
+distance = new google.maps.DistanceMatrixService();
+}
+
+function geo_error() {
+  alert("Sorry, no position available.");
 }
 
 
@@ -33,6 +41,10 @@ var viewModel = {
     togglePass : ko.observable(false),
     pass1 : ko.observable(''),
     pass2 : ko.observable(''),
+    currentPoints : ko.observable(),
+    userLat : ko.observable(''),
+    userLng : ko.observable(''),
+    eventLocation : ko.observable(''),
     checkPass : function() {
         if (this.pass1() != this.pass2()) {
             return this.togglePass(true);
@@ -80,6 +92,58 @@ var viewModel = {
             }).fail(function() {
                 alert("Error Loading Characters");
             });
+    },
+    setPosition : function(position) {
+        geo_options = {
+            enableHighAccuracy : true,
+            maximumAge : 30000,
+            timeout : 27000
+        };
+        navigator.geolocation.getCurrentPosition(function(position) {
+            viewModel.userLat(position.coords.latitude);
+            viewModel.userLng(position.coords.longitude);
+        }, geo_error , geo_options);
+    },
+    locCheck : function() {
+        loc = new google.maps.LatLng(viewModel.userLat(), viewModel.userLng())
+        viewModel.eventLocation($("#loc").text());
+        distance.getDistanceMatrix(
+          {
+            origins: [loc],
+            destinations: [viewModel.eventLocation()],
+            travelMode : 'DRIVING'
+          }, callback);
+        function callback(response, status) {
+            if (status == 'OK') {
+                console.log(status);
+                console.log(response);
+                meters = response.rows[0].elements[0].distance.value;
+                console.log(meters);
+
+                if(meters < 1000) {
+                  data = $("#points").text()
+                  $.post("http://localhost:5000/api/check_in/", {
+                    points : data
+                  })
+                  .done(function(data) {
+                    console.log(data);
+                  })
+                  .fail(function() {
+                    console.log("Error");
+                  })
+                } else {
+                    points = false;
+                    return alert("You're not close enough to the event.")
+                }
+            }return console.log(points);
+        }
+
     }
 };
 ko.applyBindings(viewModel);
+
+if ("geolocation" in navigator) {
+  console.log('geolocation is available');
+} else {
+   console.log('geolocation IS NOT available');
+}

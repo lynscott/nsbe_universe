@@ -17,8 +17,9 @@
   {% else %}
   <p>No Image Uploaded</p>
   {% endif %}
-  <h4>Location: {{event.address}}</h2>
-  <h4>Points: {{event.points}}</h2>
+  <h4 id="loc">{{event.address}}</h4>
+  <h5><strong>Points:</strong></h5>
+  <h5 id="points">{{event.points}}</h5>
   <div class="row justify-content-center" >
     <div class="col-md-6">
       <p>Info: {{event.details}}</p>

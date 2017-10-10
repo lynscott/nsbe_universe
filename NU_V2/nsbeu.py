@@ -82,7 +82,11 @@ def addUserPoints(user_id,event):
     session.commit
     return new_points
 
-
+@app.route('/api/check_in/', methods=['POST'])
+def userCheckIn():
+    points = request.form['points']
+    print(points)
+    return points
 
 @app.route('/users/JSON')
 def JSON():
