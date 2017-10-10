@@ -93,18 +93,18 @@ var viewModel = {
                 alert("Error Loading Characters");
             });
     },
-    setPosition : function(position) {
+    setPosition : ko.computed(function() {
         geo_options = {
             enableHighAccuracy : true,
             maximumAge : 30000,
             timeout : 27000
         };
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.watchPosition(function(position) {
             viewModel.userLat(position.coords.latitude);
             viewModel.userLng(position.coords.longitude);
         }, geo_error , geo_options);
-    },
-    locCheck : function() {
+    }),
+    checkIn : function() {
         loc = new google.maps.LatLng(viewModel.userLat(), viewModel.userLng())
         viewModel.eventLocation($("#loc").text());
         distance.getDistanceMatrix(
