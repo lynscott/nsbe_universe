@@ -17,7 +17,7 @@ class User(Base):
     major = Column(String(50), nullable=False)
     password = Column(String(250))
     picture = Column(String(250))
-    points = Column(Integer)
+    points = Column(Integer, default=0)
     alias = Column(String(50), nullable=False)
     alias_bio = Column(String(250), nullable=False)
     alias_pic = Column(String(250), nullable=False)

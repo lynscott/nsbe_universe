@@ -74,19 +74,17 @@ def getUserID(email):
     except:
         return None
 
-def addUserPoints(user_id,event):
-    user = session.query(User).filter_by(id=user_id).first()
-    points =  session.query(Event).filter_by(Event.id).points
-    new_points = user.points + points
-    session.add(new_points)
-    session.commit
-    return new_points
 
 @app.route('/api/check_in/', methods=['POST'])
 def userCheckIn():
-    points = request.form['points']
+    points = int(request.form['points'])
+    flash("Check-in successful!")
+    current_user = session.query(User).filter_by(id=login_session['user_id']).first()
+    current_user.points = current_user.points + points
+    session.add(current_user)
+    session.commit()
     print(points)
-    return points
+    return str(points)
 
 @app.route('/users/JSON')
 def JSON():
@@ -122,7 +120,7 @@ def goHome():
 def showEvents():
     events = session.query(Event).all()
     creator = getUserInfo(Event.user_id)
-    current_user = getUserInfo(User.id)
+    current_user = session.query(User).filter_by(id=login_session['user_id']).first()
     # return "This page will show all my catalogs of various sauces"
     return render_template('eventList.html', events=events, current_user=current_user, creator=creator)
 
