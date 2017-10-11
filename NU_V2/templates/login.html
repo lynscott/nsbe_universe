@@ -3,6 +3,16 @@
 
 
 <div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+
+      <ul>
+      {% for message in messages %}
+          <li> <strong> {{ message }} </strong> </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
   <div class="jumbotron" id="about">
 
   <h1 class="display-3">Log In</h1>

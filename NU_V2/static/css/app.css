@@ -86,3 +86,7 @@ hr {
   background-color: black;
   font-size: 1em;
 }
+
+#check {
+  color: lime;
+}

@@ -5,7 +5,11 @@
   <div class="jumbotron" id="about">
     <div class="row">
       <div class="col-sm-4">
-        <button type="button" class="btn btn-primary" data-bind="click: checkIn, enable: notChecked" name="button">Check-in</button>
+        {% if event.id in current_user.attended %}
+        <h2><span class="badge badge-secondary"><i id="check" class="fa fa-check" aria-hidden="true"></i></span></h2>
+        {% else %}
+        <button type="button" class="btn btn-primary" data-bind="click: checkIn" name="button">Check-in</button>
+        {% endif %}
       </div>
     </div>
   <h1 class="display-3">{{event.name}}</h1>

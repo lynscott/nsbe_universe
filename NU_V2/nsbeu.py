@@ -31,7 +31,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 APPLICATION_NAME = "nsbe universe"
 
 
-engine = create_engine('postgresql://nsbeu')
+engine = create_engine('postgresql://nsbeu@localhost:5432/nsbeu')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -88,7 +88,7 @@ def userCheckIn():
     print(current_user.attended )
     session.add(current_user)
     session.commit()
-    return "True"
+    return redirect(url_for('eventList'))
 
 @app.route('/users/JSON')
 def JSON():
@@ -143,8 +143,10 @@ def userLogin():
             login_session['pic'] = user.alias_pic
             flash('Now logged in as %s' % login_session['username'])
             return redirect(url_for('goHome'))
-        else:
+        elif user is None:
             flash("You dont have an account with that email address!")
+        elif user is not None and bcrypt.verify(request.form['password'], user.password) is False:
+            flash("Password Incorrect!")
     return render_template('login.html', current_user=current_user)
 
 
@@ -231,9 +233,9 @@ def uploaded_picture(filename):
 @app.route('/event/<int:event_id>/details')
 def eventDetail(event_id):
     event = session.query(Event).filter_by(id=event_id).one()
-    creator = getUserInfo(Event.user_id)
+    current_user = session.query(User).filter_by(id=login_session['user_id']).first()
     return render_template('eventDetail.html', id=event_id, event=event,
-                            creator=creator)
+                            current_user=current_user)
 
 @app.route('/logout/')
 def manualLogOut():

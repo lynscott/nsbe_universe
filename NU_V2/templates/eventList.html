@@ -4,6 +4,16 @@
 <div class="jumbotron jumbotron-fluid">
 
   <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     <h1 class="display-3">Event List</h1>
     <p class="lead">Welcome back {{session.alias}} you currently have {{current_user.points}} points.</p>
 

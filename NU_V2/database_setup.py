@@ -60,7 +60,7 @@ class Event(Base):
         }
 
 
-engine = create_engine('postgresql://nsbeu')
+engine = create_engine('postgresql://nsbeu@localhost:5432/nsbeu')
 
 
 Base.metadata.create_all(engine)
