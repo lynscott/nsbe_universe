@@ -4,6 +4,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Date, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from sqlalchemy.dialects.postgresql import ARRAY
 
 Base = declarative_base()
 
@@ -15,12 +16,13 @@ class User(Base):
     email = Column(String(50), nullable=False)
     year = Column(String(50), nullable=False)
     major = Column(String(50), nullable=False)
-    password = Column(String(250))
-    picture = Column(String(250))
+    password = Column(String(500))
+    picture = Column(String(500))
     points = Column(Integer, default=0)
     alias = Column(String(50), nullable=False)
-    alias_bio = Column(String(250), nullable=False)
-    alias_pic = Column(String(250), nullable=False)
+    alias_bio = Column(String(500), nullable=False)
+    alias_pic = Column(String(500), nullable=False)
+    attended = Column(ARRAY(Integer), default=0)
 
     @property
     def serialize(self):
@@ -32,6 +34,7 @@ class User(Base):
             'major': self.major,
             'alias': self.alias,
             'points': self.points,
+            'attended': self.attended,
                 }
 
 class Event(Base):
@@ -57,7 +60,7 @@ class Event(Base):
         }
 
 
-engine = create_engine('sqlite:///nsbeuniv_users.db')
+engine = create_engine('postgresql://nsbeu')
 
 
 Base.metadata.create_all(engine)

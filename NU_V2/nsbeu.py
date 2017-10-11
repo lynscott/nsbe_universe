@@ -1,7 +1,7 @@
 import os
 import sys
-from flask import (Flask, render_template, request, redirect,
-                    url_for, jsonify, flash, send_from_directory)
+from flask import (Flask, render_template, request, redirect, url_for,
+                                jsonify, flash, send_from_directory)
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Event, User
@@ -31,7 +31,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 APPLICATION_NAME = "nsbe universe"
 
 
-engine = create_engine('sqlite:///nsbeuniv_users.db')
+engine = create_engine('postgresql://nsbeu')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -77,14 +77,18 @@ def getUserID(email):
 
 @app.route('/api/check_in/', methods=['POST'])
 def userCheckIn():
-    points = int(request.form['points'])
+    points = int(request.form['data[points]'])
+    print(points)
+    event_id = int(request.form['data[event_id]'])
+    print(event_id)
     flash("Check-in successful!")
     current_user = session.query(User).filter_by(id=login_session['user_id']).first()
     current_user.points = current_user.points + points
+    current_user.attended = current_user.attended + [event_id]
+    print(current_user.attended )
     session.add(current_user)
     session.commit()
-    print(points)
-    return str(points)
+    return "True"
 
 @app.route('/users/JSON')
 def JSON():
@@ -238,7 +242,7 @@ def manualLogOut():
     del login_session['user_id']
     del login_session['points']
     del login_session['alias']
-    del login_session['alias_pic']
+    del login_session['pic']
     flash('You are now logged out!')
     return redirect(url_for('goHome'))
 

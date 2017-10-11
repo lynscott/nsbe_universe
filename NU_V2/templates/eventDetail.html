@@ -5,10 +5,11 @@
   <div class="jumbotron" id="about">
     <div class="row">
       <div class="col-sm-4">
-        <button type="button" class="btn btn-primary" data-bind="click: checkIn" name="button">Check-in</button>
+        <button type="button" class="btn btn-primary" data-bind="click: checkIn, enable: notChecked" name="button">Check-in</button>
       </div>
     </div>
   <h1 class="display-3">{{event.name}}</h1>
+  <h5 id="event">{{event.id}}</h5>
   <h3>Date: {{event.date}}</h3>
   {% if event.picture %}
   <p>

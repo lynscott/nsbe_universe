@@ -41,7 +41,7 @@ var viewModel = {
     togglePass : ko.observable(false),
     pass1 : ko.observable(''),
     pass2 : ko.observable(''),
-    currentPoints : ko.observable(),
+    notChecked : ko.observable(true),
     userLat : ko.observable(''),
     userLng : ko.observable(''),
     eventLocation : ko.observable(''),
@@ -116,14 +116,17 @@ var viewModel = {
         function callback(response, status) {
             if (status == 'OK') {
                 console.log(status);
-                console.log(response);
                 meters = response.rows[0].elements[0].distance.value;
                 console.log(meters);
 
-                if(meters < 1000) {
-                  data = $("#points").text()
+                if(meters < 1000 & viewModel.notChecked()==true) {
+                  points = parseInt($("#points").text());
+                  event_id= parseInt($("#event").text());
+  
+                  viewModel.notChecked(false);
                   $.post("http://localhost:5000/api/check_in/", {
-                    points : data
+                    data : {"points": points, "event_id":event_id},
+                    dataType : "application/json",
                   })
                   .done(function(data) {
                     console.log(data);
