@@ -25,7 +25,9 @@ function geo_error() {
 $.getJSON("http://localhost:5000/users/JSON")
         .done(function(data){
             console.log(data);
-            return users=data.users;
+            users=data.users
+            events=data.events
+            return data;
         }).fail(function() {
             alert("Error getting user data")
         });
@@ -105,11 +107,11 @@ var viewModel = {
     }),
     checkIn : function() {
         loc = new google.maps.LatLng(viewModel.userLat(), viewModel.userLng())
-        viewModel.eventLocation($("#loc").text());
+        viewModel.eventLocation(events.filter(events => events.id== parseInt($("#event").text())));
         distance.getDistanceMatrix(
           {
             origins: [loc],
-            destinations: [viewModel.eventLocation()],
+            destinations: [viewModel.eventLocation()[0].address],
             travelMode : 'DRIVING'
           }, callback);
         function callback(response, status) {
@@ -126,8 +128,8 @@ var viewModel = {
                     data : {"points": points, "event_id":event_id},
                     dataType : "application/json",
                   })
-                  .done(function(data) {
-                    console.log(data);
+                  .done(function() {
+                    console.log("Success");
                   })
                   .fail(function() {
                     console.log("Error");
@@ -136,7 +138,7 @@ var viewModel = {
                     points = false;
                     return alert("You're not close enough to the event.")
                 }
-            }return console.log(points);
+            }
         }
 
     }

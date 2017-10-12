@@ -24,15 +24,21 @@
           <th>Name</th>
           <th>Date</th>
           <th>Points</th>
+          <th>Checked-in</th>
         </tr>
       </thead>
       <tbody>
         {% for event in events %}
         <tr>
-          <th scope="row">{{event.id}}</th>
+          <th scope="row" id="event">{{event.id}}</th>
           <td><a href="{{url_for('eventDetail', event_id=event.id)}}">{{event.name}}</a></td>
           <td>{{event.date}}</td>
-          <td>{{event.points}}</td>
+          <td id="points">{{event.points}}</td>
+          {% if event.id in current_user.attended %}
+          <td><h5><span class="badge badge-secondary"><i id="check" class="fa fa-check" aria-hidden="true"></i></span></h5></td>
+          {% else %}
+          <td><h5><span class="badge badge-secondary"><i id="x" class="fa fa-times" aria-hidden="true"></i></span><h5></td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>

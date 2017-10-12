@@ -76,11 +76,10 @@ def getUserID(email):
 
 
 @app.route('/api/check_in/', methods=['POST'])
+@login_required
 def userCheckIn():
     points = int(request.form['data[points]'])
-    print(points)
     event_id = int(request.form['data[event_id]'])
-    print(event_id)
     flash("Check-in successful!")
     current_user = session.query(User).filter_by(id=login_session['user_id']).first()
     current_user.points = current_user.points + points
@@ -88,12 +87,20 @@ def userCheckIn():
     print(current_user.attended )
     session.add(current_user)
     session.commit()
-    return redirect(url_for('eventList'))
+    return redirect(url_for('showEvents'))
+
 
 @app.route('/users/JSON')
-def JSON():
+def usersJSON():
     users = session.query(User).all()
-    return jsonify(users=[r.serialize for r in users])
+    events = session.query(Event).all()
+    return jsonify(users=[r.serialize for r in users],events=[r.serialize for r in events])
+
+
+@app.route('/events/JSON')
+def eventsJSON():
+    events = session.query(Event).all()
+    return jsonify(events=[r.serialize for r in events])
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -121,6 +128,7 @@ def goHome():
 
 # Show all sauce catalogs
 @app.route('/events/')
+@login_required
 def showEvents():
     events = session.query(Event).all()
     creator = getUserInfo(Event.user_id)
@@ -155,7 +163,13 @@ def About():
     return render_template('about.html')
 
 
+@app.route('/leaderboard')
+def leaderBoard():
+    return render_template('leaderboard.html')
+
+
 @app.route('/event/new', methods=['GET', 'POST'])
+@login_required
 def createEvent():
     if request.method == 'POST':
         newEvent = Event(name=request.form['name'], points= request.form['points'], address=request.form[
@@ -176,7 +190,7 @@ def createEvent():
 
 
 @app.route('/event/<int:event_id>/delete/', methods=['GET', 'POST'])
-
+@login_required
 def deleteEvent(event_id):
     eventToDelete = session.query(Event).filter_by(id=event_id).one()
     # if catalogToDelete.user_id != login_session['user_id']:
@@ -191,7 +205,7 @@ def deleteEvent(event_id):
 
 
 @app.route('/event/<int:event_id>/edit', methods=['GET', 'POST'])
-
+@login_required
 def editEvent(event_id):
     editedEvent = session.query(Event).filter_by(id=event_id).one()
     # if login_session['user_id'] != catalog.user_id:
@@ -231,6 +245,7 @@ def uploaded_picture(filename):
 
 
 @app.route('/event/<int:event_id>/details')
+@login_required
 def eventDetail(event_id):
     event = session.query(Event).filter_by(id=event_id).one()
     current_user = session.query(User).filter_by(id=login_session['user_id']).first()

@@ -47,7 +47,7 @@ class Event(Base):
     address = Column(String(250), nullable=False)
     details = Column(String(250), nullable=False)
     picture = Column(String(250))
-    date = Column(String(50), nullable=False)
+    date = Column(Date, nullable=False)
     url = Column(Text)
 
     @property
@@ -57,6 +57,7 @@ class Event(Base):
             'name': self.name,
             'id': self.id,
             'points': self.points,
+            'address': self.address,
         }
 
 

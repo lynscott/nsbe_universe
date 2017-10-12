@@ -26,7 +26,7 @@
      <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbar-nav">
          <a class="nav-item nav-link" href="{{url_for('About')}}">About <span class="sr-only">(current)</span></a>
-         <a class="nav-item nav-link" href="#">Leader Board</a>
+         <a class="nav-item nav-link" href="{{url_for('leaderBoard')}}">Leader Board</a>
          {% if 'username' in session %}
          <a class="nav-item nav-link" href="{{url_for('showEvents')}}">Events</a>
          <a class="nav-item nav-link" href="{{url_for('manualLogOut')}}">Logout</a>
