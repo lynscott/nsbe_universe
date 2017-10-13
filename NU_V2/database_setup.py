@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Text
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, Text, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -49,6 +49,8 @@ class Event(Base):
     picture = Column(String(250))
     date = Column(Date, nullable=False)
     url = Column(Text)
+    start = Column(Time(timezone='America/Los_Angeles'))
+    end = Column(Time(timezone='America/Los_Angeles'))
 
     @property
     def serialize(self):
@@ -58,6 +60,7 @@ class Event(Base):
             'id': self.id,
             'points': self.points,
             'address': self.address,
+            'date': self.date,
         }
 
 

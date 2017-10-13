@@ -94,13 +94,8 @@ def userCheckIn():
 def usersJSON():
     users = session.query(User).all()
     events = session.query(Event).all()
-    return jsonify(users=[r.serialize for r in users],events=[r.serialize for r in events])
+    return jsonify(users=[r.serialize for r in users], events=[r.serialize for r in events])
 
-
-@app.route('/events/JSON')
-def eventsJSON():
-    events = session.query(Event).all()
-    return jsonify(events=[r.serialize for r in events])
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -173,7 +168,8 @@ def leaderBoard():
 def createEvent():
     if request.method == 'POST':
         newEvent = Event(name=request.form['name'], points= request.form['points'], address=request.form[
-                           'address'], date=request.form['date'], details=request.form['details'],
+                           'address'], date=request.form['date'], start=request.form['start'],
+                           end=request.form['end'], details=request.form['details'],
                          url=request.form['url'])
         if request.files['picture']:
             picture = request.files['picture']
