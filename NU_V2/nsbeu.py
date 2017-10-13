@@ -218,6 +218,10 @@ def editEvent(event_id):
             editedEvent.address = request.form['address']
         if request.form['details']:
             editedEvent.details = request.form['details']
+        if request.form['start']:
+            editedEvent.details = request.form['start']
+        if request.form['end']:
+            editedEvent.details = request.form['end']
         if request.form['url']:
             editedEvent.url = request.form['url']
         if request.files['picture']:
