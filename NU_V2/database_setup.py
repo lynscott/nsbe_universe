@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Text, Time
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, TIMESTAMP, Text, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -47,7 +47,7 @@ class Event(Base):
     address = Column(String(250), nullable=False)
     details = Column(String(250), nullable=False)
     picture = Column(String(250))
-    date = Column(Date, nullable=False)
+    date = Column(TIMESTAMP(timezone='America/Los_Angeles'), nullable=False)
     url = Column(Text)
     start = Column(Time(timezone='America/Los_Angeles'))
     end = Column(Time(timezone='America/Los_Angeles'))

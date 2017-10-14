@@ -32,6 +32,8 @@ $.getJSON("http://localhost:5000/users/JSON")
             alert("Error getting user data")
         });
 
+start = $("#date").text() + ' ' + $("#start").text()
+end = $("#date").text() + ' ' + $("#start").text()
 
 var viewModel = {
     userInput : ko.observable(''),
@@ -46,6 +48,9 @@ var viewModel = {
     userLat : ko.observable(''),
     userLng : ko.observable(''),
     eventLocation : ko.observable(''),
+    startTime : ko.observable(moment(start)),
+    endTime : ko.observable(moment(end)),
+    showCheckin: ko.observable(true),
     checkPass : function() {
         if (this.pass1() != this.pass2()) {
             return this.togglePass(true);
@@ -141,7 +146,14 @@ var viewModel = {
             }
         }
 
-    }
+    },
+    checkDate : function() {
+      if(viewModel.startTime() < moment() & viewModel.endTime() > moment()) {
+        viewModel.showCheckin(true);
+      }else {
+        viewModel.showCheckin(false);
+      }
+    },
 };
 ko.applyBindings(viewModel);
 
