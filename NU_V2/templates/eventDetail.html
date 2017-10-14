@@ -8,13 +8,14 @@
         {% if event.id in current_user.attended %}
         <h2><span class="badge badge-secondary"><i id="check" class="fa fa-check" aria-hidden="true"></i></span></h2>
         {% else %}
-        <button type="button" class="btn btn-primary" data-bind="click: checkIn, visible: showCheckin" name="button">Check-in</button>
+        <button type="button" class="btn btn-primary" data-bind="click: checkDate, disable: disable" name="button">Check-in</button>
         {% endif %}
       </div>
     </div>
+
   <h1 class="display-3">{{event.name}}</h1>
   <h5 id="event">{{event.id}}</h5>
-  <h3 id="date">{{event.date.strftime('%m/%d/%Y')}}</h3>
+  <h3 id="date">{{event.date.strftime('%m-%d-%Y')}}</h3>
   {% if event.picture %}
   <p>
   <img src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Event Image" id="event-pic" class="img-fluid">

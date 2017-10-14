@@ -18,7 +18,7 @@ distance = new google.maps.DistanceMatrixService();
 }
 
 function geo_error() {
-  alert("Sorry, no position available.");
+  alertify.alert("Sorry, no position available.");
 }
 
 
@@ -29,7 +29,7 @@ $.getJSON("http://localhost:5000/users/JSON")
             events=data.events
             return data;
         }).fail(function() {
-            alert("Error getting user data")
+            alertify.error("Error getting user data");
         });
 
 start = $("#date").text() + ' ' + $("#start").text()
@@ -50,7 +50,7 @@ var viewModel = {
     eventLocation : ko.observable(''),
     startTime : ko.observable(moment(start)),
     endTime : ko.observable(moment(end)),
-    showCheckin: ko.observable(true),
+    disable: ko.observable(false),
     checkPass : function() {
         if (this.pass1() != this.pass2()) {
             return this.togglePass(true);
@@ -96,7 +96,7 @@ var viewModel = {
 
 
             }).fail(function() {
-                alert("Error Loading Characters");
+                alertify.error("Error Loading Characters");
             });
     },
     setPosition : ko.computed(function() {
@@ -134,14 +134,15 @@ var viewModel = {
                     dataType : "application/json",
                   })
                   .done(function() {
-                    console.log("Success");
+                    viewModel.disable(true);
+                    return alertify.success("Check-in successful!");
                   })
                   .fail(function() {
                     console.log("Error");
                   })
                 } else {
                     points = false;
-                    return alert("You're not close enough to the event.")
+                    return alertify.error("You're not close enough to the event.");
                 }
             }
         }
@@ -149,11 +150,13 @@ var viewModel = {
     },
     checkDate : function() {
       if(viewModel.startTime() < moment() && viewModel.endTime() > moment()) {
-        viewModel.showCheckin(true);
-      }else {
-        viewModel.showCheckin(false);
+        return viewModel.checkIn();
+      }else if (viewModel.startTime() > moment()) {
+        return alertify.alert("This event hasn't started yet!");
+      }else if (viewModel.endTime() < moment()) {
+        return alertify.alert("This event has ended.")
       }
-    },
+    }
 };
 ko.applyBindings(viewModel);
 
