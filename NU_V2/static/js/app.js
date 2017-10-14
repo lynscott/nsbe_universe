@@ -33,7 +33,7 @@ $.getJSON("http://localhost:5000/users/JSON")
         });
 
 start = $("#date").text() + ' ' + $("#start").text()
-end = $("#date").text() + ' ' + $("#start").text()
+end = $("#date").text() + ' ' + $("#end").text()
 
 var viewModel = {
     userInput : ko.observable(''),
@@ -148,7 +148,7 @@ var viewModel = {
 
     },
     checkDate : function() {
-      if(viewModel.startTime() < moment() & viewModel.endTime() > moment()) {
+      if(viewModel.startTime() < moment() && viewModel.endTime() > moment()) {
         viewModel.showCheckin(true);
       }else {
         viewModel.showCheckin(false);
