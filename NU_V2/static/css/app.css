@@ -95,6 +95,6 @@ hr {
   color:black;
 }
 
-#event-text {
-  font-size: 1.5em;
+#event-text, .list-group-item {
+  background-color: lightgrey;
 }

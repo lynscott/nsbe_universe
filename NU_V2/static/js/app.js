@@ -32,8 +32,8 @@ $.getJSON("http://localhost:5000/users/JSON")
             alertify.error("Error getting user data");
         });
 
-start = $("#date").text() + ' ' + $("#start").text()
-end = $("#date").text() + ' ' + $("#end").text()
+start = $("#date").text().slice(-10) + ' ' + $("#start").text().slice(-8)
+end = $("#date").text().slice(-10) + ' ' + $("#end").text().slice(-8)
 
 var viewModel = {
     userInput : ko.observable(''),
@@ -112,7 +112,7 @@ var viewModel = {
     }),
     checkIn : function() {
         loc = new google.maps.LatLng(viewModel.userLat(), viewModel.userLng())
-        viewModel.eventLocation(events.filter(events => events.id== parseInt($("#event").text())));
+        viewModel.eventLocation(events.filter(events => events.id== parseInt($("#event").text().slice(8))));
         distance.getDistanceMatrix(
           {
             origins: [loc],
@@ -126,8 +126,8 @@ var viewModel = {
                 console.log(meters);
 
                 if(meters < 1000) {
-                  points = parseInt($("#points").text());
-                  event_id= parseInt($("#event").text());
+                  points = parseInt($("#points").text().slice(7));
+                  event_id= parseInt($("#event").text().slice(8));
 
                   $.post("http://localhost:5000/api/check_in/", {
                     data : {"points": points, "event_id":event_id},
