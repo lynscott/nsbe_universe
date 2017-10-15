@@ -94,3 +94,7 @@ hr {
 #x {
   color:black;
 }
+
+#event-text {
+  font-size: 1.5em;
+}

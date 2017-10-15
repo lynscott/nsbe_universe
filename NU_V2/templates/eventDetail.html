@@ -3,46 +3,53 @@
 
 <div class="container">
   <div class="jumbotron" id="about">
-    <div class="row">
-      <div class="col-sm-4">
-        {% if event.id in current_user.attended %}
-        <h2><span class="badge badge-secondary"><i id="check" class="fa fa-check" aria-hidden="true"></i></span></h2>
-        {% else %}
-        <button type="button" class="btn btn-primary" data-bind="click: checkDate, disable: disable" name="button">Check-in</button>
-        {% endif %}
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card text-center border-light mb-3" id="event-text">
+          {% if event.picture %}
+          <img class="card-img-top" src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Card image cap">
+          {% else %}
+          <img class="card-img-top" src="" alt="No Image Uploaded">
+          {% endif %}
+          <div class="card-body">
+            <h4 class="card-title">{{event.name}}</h4>
+            <p class="card-text">{{event.details}}</p>
+          </div>
+          <ul  class="list-group list-group-flush bg-dark">
+            <li class="list-group-item"> Date: {{event.date.strftime('%m-%d-%Y')}}</li>
+            <li class="list-group-item">{{event.address}}</li>
+            <li class="list-group-item">Points: {{event.points}}</li>
+            <li class="list-group-item"> From: {{event.start.strftime('%I:%M %p')}}</li>
+            <li class="list-group-item">Until: {{event.end.strftime('%I:%M %p')}}</li>
+          </ul>
+          <div class="card-body">
+            {% if event.id in current_user.attended %}
+            <h2><span class="badge badge-secondary"><i id="check" class="fa fa-check" aria-hidden="true"></i></span></h2>
+            {% else %}
+            <button type="button" class="btn btn-large btn-primary" data-bind="click: checkDate, disable: disable" name="button">Check-in</button>
+            {% endif %}
+            <br>
+            <a href="{{event.url}}" class="card-link">Link to event</a>
+          </div>
+        </div>
       </div>
     </div>
-
-  <h1 class="display-3">{{event.name}}</h1>
-  <h5 id="event">{{event.id}}</h5>
-  <h3 id="date">{{event.date.strftime('%m-%d-%Y')}}</h3>
-  {% if event.picture %}
-  <p>
-  <img src="{{ url_for('uploaded_picture', filename = event.picture) }}" alt="Event Image" id="event-pic" class="img-fluid">
-  </p>
-  {% else %}
-  <p>No Image Uploaded</p>
-  {% endif %}
-  <h4 id="loc">{{event.address}}</h4>
-  <p>From:</p>
-  <h4 id="start">{{event.start.strftime('%I:%M %p')}}</h4>
-  <p>Till:</p>
-  <h4 id="end">{{event.end.strftime('%I:%M %p')}}</h4>
-  <h5><strong>Points:</strong></h5>
-  <h5 id="points">{{event.points}}</h5>
-  <div class="row justify-content-center" >
-    <div class="col-md-6">
-      <p>Info: {{event.details}}</p>
+    <div class="row justify-content-left">
+      <div class="col-md-2">
+        <a class = "btn btn-light" href="{{url_for('showEvents')}}">Back To Events</a>
+      </div>
     </div>
   </div>
-
-  <p>URL: <a href="{{event.url}}">{{event.url}}</a></p>
-
+  <div class="invisible">
+    <p id="event">{{event.id}}</p>
+    <p id="date">{{event.date.strftime('%m-%d-%Y')}}</p>
+    <p id="address">{{event.address}}</p>
+    <p id="points">{{event.points}}</p>
+    <p id="start">{{event.start.strftime('%I:%M %p')}}</p>
+    <p id="end">{{event.end.strftime('%I:%M %p')}}</p>
   </div>
   <div class="row" id="about">
-    <div class="col-md-4">
-      <a class = "btn btn-light" href="{{url_for('showEvents')}}">Back To Events</a>
-    </div>
+
     <div class="col-md-4">
       <a class = "btn btn-danger"  align = "center" href="{{url_for('deleteEvent', event_id=event.id) }}">Delete</a>
     </div>
