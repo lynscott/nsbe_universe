@@ -5,7 +5,28 @@
   <div class="container">
     <h1 class="display-3">Leader Board</h1>
     <p class="lead">Who will rise to the top?</p>
-      
+    <table class="table table-inverse">
+      <thead>
+        <tr>
+          <th>Points</th>
+          <th>Name</th>
+          <th></th>
+          <th>Major</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <th scope="row" id="">{{user.points}}</th>
+          <td>{{user.alias}}</td>
+          <td><img src="{{user.alias_pic}}" class="img-fluid" width="50" height="50" alt=""></td>
+          <td>{{user.major}}</td>
+          <td>{{user.year}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
   </div>
 

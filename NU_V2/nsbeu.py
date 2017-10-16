@@ -160,7 +160,9 @@ def About():
 
 @app.route('/leaderboard')
 def leaderBoard():
-    return render_template('leaderboard.html')
+    users = session.query(User).all()
+    order = sorted(users, key=lambda user: user.points, reverse=True)
+    return render_template('leaderboard.html', users=order)
 
 
 @app.route('/event/new', methods=['GET', 'POST'])
