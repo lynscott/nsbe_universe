@@ -68,7 +68,9 @@ hr {
   align-self: center;
 }
 
-#about {
+#about,
+table,
+th {
   text-align: center;
 }
 
@@ -85,6 +87,10 @@ hr {
   color: white;
   background-color: black;
   font-size: 1em;
+}
+
+#user {
+  text-align: right;
 }
 
 #check {
