@@ -117,7 +117,7 @@ def admin_required(f):
     @wraps(f)
     def admin_function(*args, **kwargs):
         if login_session['is_admin'] is False:
-            flash("You are not authorized to for that page!")
+            flash("You are not authorized for that page!", "error")
             return redirect('/login')
         return f(*args, **kwargs)
     return admin_function
@@ -221,12 +221,12 @@ def userLogin():
             login_session['alias'] = user.alias
             login_session['pic'] = user.alias_pic
             login_session['is_admin'] =user.is_admin
-            flash('Now logged in as %s' % login_session['username'])
+            flash('Now logged in as %s' % login_session['username'], "success")
             return redirect(url_for('goHome'))
         elif user is None:
-            flash("You dont have an account with that email address!")
+            flash("You dont have an account with that email address!", "error")
         elif user is not None and bcrypt.verify(request.form['password'], user.password) is False:
-            flash("Password Incorrect!")
+            flash("Password Incorrect!", "error")
     return render_template('login.html', current_user=current_user)
 
 
@@ -259,7 +259,7 @@ def createEvent():
             newEvent.picture=filename
         session.add(newEvent)
         session.commit()
-        flash("New Event Created!")
+        flash("New Event Created!", "success")
         return redirect(url_for('showEvents'))
     else:
         return render_template('eventForm.html')
@@ -287,7 +287,7 @@ def manualLogOut():
     del login_session['alias']
     del login_session['pic']
     del login_session['is_admin']
-    flash('You are now logged out!')
+    flash('You are now logged out!', "success")
     return redirect(url_for('goHome'))
 
 
