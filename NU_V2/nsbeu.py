@@ -7,8 +7,6 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Event, User
 from flask import session as login_session
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
 import random
 import string
 from oauth2client.client import flow_from_clientsecrets
@@ -23,7 +21,7 @@ from passlib.hash import bcrypt
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, SelectField
 from wtforms.validators import InputRequired, Email, EqualTo
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 from flask_admin.contrib.fileadmin import FileAdmin
@@ -49,16 +47,24 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
+
+class MyHomeView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        if  login_session['is_admin']!=True:
+            return redirect(url_for('userLogin'))
+        return super(MyHomeView, self).index()
+
+
 class MyAdmin(FileAdmin):
     allowed_extensions = ('swf', 'jpg', 'gif', 'png')
 
     def is_accessible(self):
         return login_session['is_admin']==True
 
-
     def inaccessible_callback(self, name, **kwargs):
     # redirect to login page if user doesn't have access
-        return redirect(url_for('/home', next=request.url))
+        return redirect(url_for('goHome', next=request.url))
 
 
 class UserView(ModelView):
@@ -71,10 +77,9 @@ class UserView(ModelView):
     def is_accessible(self):
         return login_session['is_admin']==True
 
-
     def inaccessible_callback(self, name, **kwargs):
     # redirect to login page if user doesn't have access
-        return redirect(url_for('/home', next=request.url))
+        return redirect(url_for('goHome', next=request.url))
 
 class EventView(ModelView):
     form_base_class = SecureForm
@@ -82,14 +87,15 @@ class EventView(ModelView):
     can_export = True
 
     def is_accessible(self):
-        return login_session['is_admin'] ==True
+        return login_session['is_admin']==True
+
 
     def inaccessible_callback(self, name, **kwargs):
     # redirect to login page if user doesn't have access
 
         return redirect(url_for('goHome', next=request.url))
 
-admin = Admin(app, name='NSBE U Admin', template_mode='bootstrap3')
+admin = Admin(app, index_view=MyHomeView(), name='NSBE U', template_mode='bootstrap3')
 admin.add_view(UserView(User, session))
 admin.add_view(EventView(Event, session))
 path = os.path.join(os.path.dirname(__file__), 'media/eventPics/')
@@ -141,12 +147,6 @@ def getUserID(email):
     except:
         return None
 
-
-@app.route('/admin/')
-@login_required
-@admin_required
-def adminPage():
-    return redirect(url_for('/home/'))
 
 
 @app.route('/api/check_in/', methods=['POST'])
