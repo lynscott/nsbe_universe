@@ -6,6 +6,9 @@ from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Event, User
 from flask import session as login_session
+from flask_sqlalchemy import SQLAlchemy
+from flask_security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required
 import random
 import string
 from oauth2client.client import flow_from_clientsecrets
@@ -24,7 +27,8 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 from flask_admin.contrib.fileadmin import FileAdmin
-from flask_basicauth import BasicAuth
+from flask_admin import helpers as admin_helpers
+
 
 
 
@@ -33,14 +37,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['BASIC_AUTH_USERNAME'] = 'john'
-app.config['BASIC_AUTH_PASSWORD'] = 'matrix'
-
-basic_auth = BasicAuth(app)
 
 
 APPLICATION_NAME = "nsbe universe"
-
 
 
 engine = create_engine('postgresql://nsbeu@localhost:5432/nsbeu')
@@ -48,6 +47,19 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+class MyAdmin(FileAdmin):
+    allowed_extensions = ('swf', 'jpg', 'gif', 'png')
+
+    def is_accessible(self):
+        return login_session['is_admin']==True
+
+
+    def inaccessible_callback(self, name, **kwargs):
+    # redirect to login page if user doesn't have access
+        return redirect(url_for('/home', next=request.url))
+
 
 class UserView(ModelView):
     form_base_class = SecureForm
@@ -77,11 +89,12 @@ class EventView(ModelView):
 
         return redirect(url_for('goHome', next=request.url))
 
-admin = Admin(app, name='NSBE U', template_mode='bootstrap3')
+admin = Admin(app, name='NSBE U Admin', template_mode='bootstrap3')
 admin.add_view(UserView(User, session))
 admin.add_view(EventView(Event, session))
 path = os.path.join(os.path.dirname(__file__), 'media/eventPics/')
-admin.add_view(FileAdmin(path, name='Event Files'))
+admin.add_view(MyAdmin(path, name='Event Files'))
+
 
 # Create login decorator
 def login_required(f):
@@ -132,7 +145,6 @@ def getUserID(email):
 @app.route('/admin/')
 @login_required
 @admin_required
-@basic_auth.required
 def adminPage():
     return redirect(url_for('/home/'))
 
@@ -230,6 +242,7 @@ def leaderBoard():
 
 @app.route('/event/new', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def createEvent():
     if request.method == 'POST':
         newEvent = Event(name=request.form['name'], points= request.form['points'], address=request.form[

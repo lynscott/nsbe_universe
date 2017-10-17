@@ -6,7 +6,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.dialects.postgresql import ARRAY
 
+
 Base = declarative_base()
+
+
 
 class User(Base):
     __tablename__ = 'user'
