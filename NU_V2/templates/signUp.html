@@ -33,13 +33,6 @@
           <input type="text" name="major" class="form-control" placeholder="Major" required>
         </div>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="alert alert-danger" data-bind="visible: togglePass" role="alert">
-            <strong>Passwords must match!</strong>
-          </div>
-        </div>
-      </div>
       <div class="form-row justify-content-center">
         <div class="col-md-6">
           <input type="password" name="password" data-bind="textInput: pass1" class="form-control" placeholder="Password" required>
@@ -53,7 +46,7 @@
       <div class="form-row justify-content-center">
         <div class="col-md-6">
           <div class="input-group">
-            <input type="text" name="alias" data-bind="textInput: userInput, disable: togglePass" class="form-control" placeholder="Enter a Marvel Character" required>
+            <input type="text" name="alias" data-bind="textInput: userInput" class="form-control" placeholder="Enter a Marvel Character" required>
             <span class="input-group-btn">
             <button type="button" data-bind="click: getInfo" class="btn btn-primary" name="search">Search</button>
             </span>
@@ -61,13 +54,7 @@
         </div>
       </div>
       <br>
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="alert alert-warning" data-bind="visible: toggleAlert" role="alert">
-            <strong>Sorry! </strong> This character is already assigned, try a different one.
-          </div>
-        </div>
-      </div>
+      <h4><a class="badge badge-dark" href="https://marvel.com">Data provided by Marvel. © 2014 Marvel</a></h4>
       <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="card">

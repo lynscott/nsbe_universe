@@ -3,7 +3,15 @@
 {% block body %}
   <div class="container-fluid">
     <div class="jumbotron">
-      <h2>Welcome to the Admin Panel.</h2>
+      <h2>Welcome to the Admin Panel {{session.username}}.</h2>
+      <p>A few tips to help you manage the site:</p>
+      <ul>
+        <li>Passwords can't be changed or updated here, only the hash is stored. User generated password updates will be in a furture revision.</li>
+        <li>Data can be downloaded as a CSV file from the links above.</li>
+        <li>Event pictures are stored in a seperate space, keep the app clean by deleting old event files.</li>
+        <li>Just about any other aspect of user/event info can be updated, deleted or created here!</li>
+        <li><strong>Users cannot be created here.</strong></li>
+      </ul>
       <a class = "btn btn-primary" href="{{url_for('goHome')}}">Back To NSBE U</a>
     </div>
   </div>

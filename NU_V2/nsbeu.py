@@ -13,6 +13,7 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
+import bleach
 from flask import make_response
 import requests
 from functools import wraps
@@ -45,7 +46,7 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
+bleach=bleach
 
 
 class MyHomeView(AdminIndexView):
@@ -72,6 +73,7 @@ class UserView(ModelView):
     column_exclude_list = ['password', 'alias_bio']
     column_searchable_list = ['name', 'email']
     form_excluded_columns = ['password', 'attended']
+    can_create = False
     can_export = True
 
     def is_accessible(self):

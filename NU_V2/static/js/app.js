@@ -24,16 +24,15 @@ function geo_error() {
 
 $.getJSON("http://localhost:5000/users/JSON")
         .done(function(data){
-            console.log(data);
-            users=data.users
-            events=data.events
+            users=data.users;
+            events=data.events;
             return data;
         }).fail(function() {
             alertify.error("Error getting user data");
         });
 
-start = $("#date").text().slice(-10) + ' ' + $("#start").text().slice(-8)
-end = $("#date").text().slice(-10) + ' ' + $("#end").text().slice(-8)
+start = $("#date").text().slice(-10) + ' ' + $("#start").text().slice(-8);
+end = $("#date").text().slice(-10) + ' ' + $("#end").text().slice(-8);
 
 var viewModel = {
     userInput : ko.observable(''),
@@ -41,8 +40,6 @@ var viewModel = {
     characterDesc : ko.observable(''),
     characterImage : ko.observable(''),
     toggleSubmit : ko.observable(false),
-    toggleAlert : ko.observable(false),
-    togglePass : ko.observable(false),
     pass1 : ko.observable(''),
     pass2 : ko.observable(''),
     userLat : ko.observable(''),
@@ -53,9 +50,10 @@ var viewModel = {
     disable: ko.observable(false),
     checkPass : function() {
         if (this.pass1() != this.pass2()) {
-            return this.togglePass(true);
+            this.toggleSubmit(false);
+            return alertify.alert('Passwords Must Match');
         }else {
-            return this.togglePass(false);
+            return this.toggleSubmit(true);
         }
     },
     getInfo : function() {
@@ -86,14 +84,14 @@ var viewModel = {
                    }
                 }
                 if( found == true){
-                    viewModel.toggleAlert(true);
-                    return viewModel.toggleSubmit(false);
+                    viewModel.toggleSubmit(false);
+                    return alertify.error('This Character is already taken!');
                 }else {
                     found = false;
-                    viewModel.toggleAlert(false);
-                    return viewModel.toggleSubmit(true);
-                }
+                    viewModel.toggleSubmit(true);
+                    return alertify.success('This Character is available!');
 
+                }
 
             }).fail(function() {
                 alertify.error("Error Loading Characters");
@@ -139,9 +137,9 @@ var viewModel = {
                   })
                   .fail(function() {
                     console.log("Error");
+                    return alertify.error("Sorry, an error occoured during check-in.");
                   })
                 } else {
-                    points = false;
                     return alertify.error("You're not close enough to the event.");
                 }
             }
@@ -164,4 +162,5 @@ if ("geolocation" in navigator) {
   console.log('geolocation is available');
 } else {
    console.log('geolocation IS NOT available');
+   alertify.error("Geolocation not available, is your device's Location Services (GPS) enabled?")
 }
