@@ -32,6 +32,10 @@
          <a class="nav-item nav-link" href="{{url_for('manualLogOut')}}">Logout</a>
          <a class="nav-item nav-link active" href="#">Welcome {{session.alias}}</a>
          <img src={{session.pic}} width="30" height="30" class="d-inline-block align-top" alt="">
+            {% if session.is_admin == True %}
+            <a href="{{url_for('admin.index')}}" class="nav-item nav-link">Admin</a>
+            {% else %}
+            {% endif %}
          {% else %}
          <a class="nav-item nav-link" href="{{url_for('signUp')}}">Sign Up</a>
          <a class="nav-item nav-link" href="{{url_for('userLogin')}}">Login</a>

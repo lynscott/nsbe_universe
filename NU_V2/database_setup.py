@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, TIMESTAMP, Text, Time
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, TIMESTAMP, Text, Time, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -23,6 +23,7 @@ class User(Base):
     alias_bio = Column(String(500), nullable=False)
     alias_pic = Column(String(500), nullable=False)
     attended = Column(ARRAY(Integer), default=0)
+    is_admin = Column(Boolean, default=False)
 
     @property
     def serialize(self):

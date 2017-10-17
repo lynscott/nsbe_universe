@@ -20,15 +20,27 @@ from passlib.hash import bcrypt
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, SelectField
 from wtforms.validators import InputRequired, Email, EqualTo
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.form import SecureForm
+from flask_admin.contrib.fileadmin import FileAdmin
+from flask_basicauth import BasicAuth
+
+
 
 UPLOAD_FOLDER = 'media/eventPics'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['BASIC_AUTH_USERNAME'] = 'john'
+app.config['BASIC_AUTH_PASSWORD'] = 'matrix'
+
+basic_auth = BasicAuth(app)
 
 
 APPLICATION_NAME = "nsbe universe"
+
 
 
 engine = create_engine('postgresql://nsbeu@localhost:5432/nsbeu')
@@ -37,6 +49,39 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+class UserView(ModelView):
+    form_base_class = SecureForm
+    column_exclude_list = ['password', 'alias_bio']
+    column_searchable_list = ['name', 'email']
+    form_excluded_columns = ['password', 'attended']
+    can_export = True
+
+    def is_accessible(self):
+        return login_session['is_admin']==True
+
+
+    def inaccessible_callback(self, name, **kwargs):
+    # redirect to login page if user doesn't have access
+        return redirect(url_for('/home', next=request.url))
+
+class EventView(ModelView):
+    form_base_class = SecureForm
+    page_size = 50
+    can_export = True
+
+    def is_accessible(self):
+        return login_session['is_admin'] ==True
+
+    def inaccessible_callback(self, name, **kwargs):
+    # redirect to login page if user doesn't have access
+
+        return redirect(url_for('goHome', next=request.url))
+
+admin = Admin(app, name='NSBE U', template_mode='bootstrap3')
+admin.add_view(UserView(User, session))
+admin.add_view(EventView(Event, session))
+path = os.path.join(os.path.dirname(__file__), 'media/eventPics/')
+admin.add_view(FileAdmin(path, name='Event Files'))
 
 # Create login decorator
 def login_required(f):
@@ -46,6 +91,15 @@ def login_required(f):
             return redirect('/login')
         return f(*args, **kwargs)
     return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def admin_function(*args, **kwargs):
+        if login_session['is_admin'] is False:
+            flash("You are not authorized to for that page!")
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return admin_function
 
 
 #Helper functions
@@ -73,6 +127,14 @@ def getUserID(email):
         return user.id
     except:
         return None
+
+
+@app.route('/admin/')
+@login_required
+@admin_required
+@basic_auth.required
+def adminPage():
+    return redirect(url_for('/home/'))
 
 
 @app.route('/api/check_in/', methods=['POST'])
@@ -144,6 +206,7 @@ def userLogin():
             login_session['points'] = user.points
             login_session['alias'] = user.alias
             login_session['pic'] = user.alias_pic
+            login_session['is_admin'] =user.is_admin
             flash('Now logged in as %s' % login_session['username'])
             return redirect(url_for('goHome'))
         elif user is None:
@@ -187,60 +250,6 @@ def createEvent():
         return render_template('eventForm.html')
 
 
-@app.route('/event/<int:event_id>/delete/', methods=['GET', 'POST'])
-@login_required
-def deleteEvent(event_id):
-    eventToDelete = session.query(Event).filter_by(id=event_id).one()
-    # if catalogToDelete.user_id != login_session['user_id']:
-    #     return '''<script>function authFunction() {alert('You are not authorized
-    #      to delete this catalog.');}</script><body onload='authFunction()''>'''
-    if request.method == 'POST':
-        session.delete(eventToDelete)
-        session.commit()
-        return redirect(url_for('showEvents', event_id=event_id))
-    else:
-        return render_template('deleteEvent.html', event=eventToDelete)
-
-
-@app.route('/event/<int:event_id>/edit', methods=['GET', 'POST'])
-@login_required
-def editEvent(event_id):
-    editedEvent = session.query(Event).filter_by(id=event_id).one()
-    # if login_session['user_id'] != catalog.user_id:
-    #     return '''<script>function authFunction() {alert('You are not authorized
-    #      to edit this item.');}</script><body onload='authFunction()''>'''
-    if request.method == 'POST':
-        if request.form['name']:
-            editedEvent.name = request.form['name']
-        if request.form['points']:
-            editedEvent.points = request.form['points']
-        if request.form['date']:
-            editedEvent.date = request.form['date']
-        if request.form['address']:
-            editedEvent.address = request.form['address']
-        if request.form['details']:
-            editedEvent.details = request.form['details']
-        if request.form['start']:
-            editedEvent.details = request.form['start']
-        if request.form['end']:
-            editedEvent.details = request.form['end']
-        if request.form['url']:
-            editedEvent.url = request.form['url']
-        if request.files['picture']:
-            picture = request.files['picture']
-            filename = secure_filename(picture.filename)
-            picture_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            picture.save(picture_path)
-            editedEvent.picture = filename
-        session.add(editedEvent)
-        session.commit()
-        flash("Event Updated!")
-        return redirect(url_for('showEvents', event_id=event_id))
-    else:
-        return render_template('editEvent.html', event_id=event_id, event=editedEvent)
-
-
-
 @app.route('/picture/<filename>')
 def uploaded_picture(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
@@ -262,6 +271,7 @@ def manualLogOut():
     del login_session['points']
     del login_session['alias']
     del login_session['pic']
+    del login_session['is_admin']
     flash('You are now logged out!')
     return redirect(url_for('goHome'))
 
