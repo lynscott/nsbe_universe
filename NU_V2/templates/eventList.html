@@ -45,8 +45,10 @@
         {% endfor %}
       </tbody>
     </table>
-
+    {% if current_user.is_admin ==True %}
     <a class= "btn btn-light" href="{{url_for('createEvent')}}">Create Event</a>
+    {% else %}
+    {% endif %}
 
   </div>
 

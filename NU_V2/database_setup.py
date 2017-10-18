@@ -25,7 +25,7 @@ class User(Base):
     alias = Column(String(50), nullable=False)
     alias_bio = Column(String(500), nullable=False)
     alias_pic = Column(String(500), nullable=False)
-    attended = Column(ARRAY(Integer), default=0)
+    attended = Column(ARRAY(Integer), default=[0])
     is_admin = Column(Boolean, default=False)
 
     @property

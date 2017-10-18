@@ -67,6 +67,9 @@ var viewModel = {
         //Request Marvel Character Info
         $.getJSON(url)
             .done(function(result) {
+                if ( result.data.results[0] == null) {
+                  return alertify.error('Character Input Invalid. Try again.');
+                }
                 var data = result.data.results[0];
 
                 //Display chracter info

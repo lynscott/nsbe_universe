@@ -46,7 +46,6 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-bleach=bleach
 
 
 class MyHomeView(AdminIndexView):
@@ -113,11 +112,12 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+#Admin decorator
 def admin_required(f):
     @wraps(f)
     def admin_function(*args, **kwargs):
         if login_session['is_admin'] is False:
-            flash("You are not authorized for that page!", "error")
+            flash("You are not authorized for that page!", "deny")
             return redirect('/login')
         return f(*args, **kwargs)
     return admin_function
@@ -197,14 +197,13 @@ def goHome():
     return render_template('index.html', current_user=current_user)
 
 
-# Show all sauce catalogs
+
 @app.route('/events/')
 @login_required
 def showEvents():
     events = session.query(Event).all()
     creator = getUserInfo(Event.user_id)
     current_user = session.query(User).filter_by(id=login_session['user_id']).first()
-    # return "This page will show all my catalogs of various sauces"
     return render_template('eventList.html', events=events, current_user=current_user, creator=creator)
 
 
@@ -224,9 +223,9 @@ def userLogin():
             flash('Now logged in as %s' % login_session['username'], "success")
             return redirect(url_for('goHome'))
         elif user is None:
-            flash("You dont have an account with that email address!", "error")
+            flash("You dont have an account with that email address!", "deny")
         elif user is not None and bcrypt.verify(request.form['password'], user.password) is False:
-            flash("Password Incorrect!", "error")
+            flash("Password Incorrect!", "deny")
     return render_template('login.html', current_user=current_user)
 
 
