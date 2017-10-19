@@ -209,7 +209,6 @@ def showEvents():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def userLogin():
-    current_user = getUserInfo(User.id)
     if request.method == 'POST':
         user = session.query(User).filter_by(email=request.form['email']).first()
         if user is not None and bcrypt.verify(request.form['password'], user.password) is True:
@@ -226,7 +225,7 @@ def userLogin():
             flash("You dont have an account with that email address!", "deny")
         elif user is not None and bcrypt.verify(request.form['password'], user.password) is False:
             flash("Password Incorrect!", "deny")
-    return render_template('login.html', current_user=current_user)
+    return render_template('login.html')
 
 
 @app.route('/about/')
