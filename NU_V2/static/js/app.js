@@ -22,7 +22,7 @@ function geo_error() {
 }
 
 
-$.getJSON("https://localhost:5000/users/JSON")
+$.getJSON("http://localhost:5000/users/JSON")
         .done(function(data){
             users=data.users;
             events=data.events;
@@ -130,7 +130,7 @@ var viewModel = {
                   points = parseInt($("#points").text().slice(7));
                   event_id= parseInt($("#event").text().slice(8));
 
-                  $.post("https://localhost:5000/api/check_in/", {
+                  $.post("http://localhost:5000/api/check_in/", {
                     data : {"points": points, "event_id":event_id},
                     dataType : "application/json",
                   })

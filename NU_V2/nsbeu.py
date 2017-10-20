@@ -27,6 +27,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin import helpers as admin_helpers
+from flask_mail import Mail
 
 
 
@@ -149,6 +150,10 @@ def getUserID(email):
     except:
         return None
 
+#create Forbidden content Error page
+@app.errorhandler(KeyError)
+def special_exception_handler(error):
+    return render_template('500.html'), 500
 
 
 @app.route('/api/check_in/', methods=['POST'])
@@ -294,5 +299,5 @@ def manualLogOut():
 
 if __name__ == '__main__':
     app.secret_key = 'nsbe_u_secret_key'
-    app.debug = True
+    app.debug = False
     app.run(host='0.0.0.0', port=5000)
