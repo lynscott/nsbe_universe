@@ -27,7 +27,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin import helpers as admin_helpers
-from flask_mail import Mail
+from flask_mail import Mail, Message
 
 
 
@@ -37,6 +37,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+mail = Mail(app)
 
 
 APPLICATION_NAME = "nsbe universe"
@@ -225,6 +226,12 @@ def userLogin():
             login_session['pic'] = user.alias_pic
             login_session['is_admin'] =user.is_admin
             flash('Now logged in as %s' % login_session['username'], "success")
+            msg = Message("Test Email",
+                  sender="support@nsbeuniverse.com",
+                  recipients=["lennord@gmail.com"])
+            msg.body = "It Worked!"
+            msg.html = "<div>testing</div>"
+            mail.send(msg)
             return redirect(url_for('goHome'))
         elif user is None:
             flash("You dont have an account with that email address!", "deny")
